@@ -7,7 +7,7 @@ host = '192.168.0.1'        # ethernet ip address
 #host = socket.gethostname() #Testing on my own machine.
 port = 12345         # Reserve a port
 x = True
-choice = 0
+choice = ""
 s.connect((host, port))
 print (s.recv(1024).decode())
 while x:
