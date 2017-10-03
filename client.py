@@ -1,35 +1,30 @@
 # Author: Jacob Cassity
 import socket               # Import socket module
+import getpass              # inports getpass, used for hiding password
 
 s = socket.socket()         # Create a socket object
-host = '192.168.0.1'        # ethernet ip address
+t = socket.socket()
+#host = '192.168.0.1'        # ethernet ip address
 #host = '192.168.2.8' # Jeremy's ip at dorm
 #host = socket.gethostname() #Testing on my own machine.
 port = 12345         # Reserve a port
 x = True
-choice = ""
+host = input("Enter ip address: ")     # sets host to ip address
 s.connect((host, port))
-print (s.recv(1024).decode())
+authCheck = "0"               # Server will check user name and password and return 0 if incorrect.
+while(authCheck == "0"):
+    id = input("id: ")
+    pw = getpass.getpass(prompt = "password: ")
+    s.send(id.encode())
+    s.send((pw.encode()))
+    authCheck = s.recv(1024).decode()
+
+choice = ""
 while x:
-    choice = input(
-        "Choose an option:" + "\n" +
-        "1: blah" + "\n" +
-        "2: blah" + "\n" +
-        "3: blah" + "\n" +
-        "4: quit" + "\n" +
-        "Enter:  "
-    )
-    s.send(choice.encode())
-    if choice == '1':
-        print("placeholder 1")
-    elif choice == '2':
-        print("Placeholder 2")
-    elif choice == '3':
-        print("placeholder 3")
-    elif choice == '4':
-        print("Quitting")
+    choice = input("Enter a command: ")
+    s.send(choice.lower().encode())
+    if choice.lower() == "quit":
         x = False
     else:
-        print("Invalid option, please try again")
-
+        print("Invalid command")
 s.close              # Close the socket when done
