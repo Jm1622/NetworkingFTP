@@ -1,11 +1,16 @@
 import socket
 import re
+import os
 commandSocket = socket.socket()
 dataSocket = socket.socket()
-host = '192.168.0.1'
+directory = "/Users/jmartin/PycharmProjects/NetworkingFTP/FTP Dir/"
+#host = '192.168.0.1'
+host = '192.168.2.14'
+#
 port = 12345
 commandSocket.bind((host, port))
 commandSocket.listen(5)
+
 while True:
     command = ""
     authenticationLoop = 1
@@ -25,4 +30,28 @@ while True:
             print('Failed')
     while command != 'quit':
         command = client.recv(1024).decode()
+        if command == 'get':
+            fileName = client.recv(1024).decode()
+            try:
+                file = open((directory + fileName), 'rb')
+                client.send('File found'.encode())
+                data = file.read(1024)
+                count = 1
+                while (data):
+                    print("Sending data..."+str(count))
+                    client.send(data)
+                    count += 1
+                    data = file.read(1024)
+                client.send("File sent".encode())
+                print("File Sent")
+                file.close()
+            except FileNotFoundError:
+                client.send('File not found'.encode())
+        directory = "/Users/jmartin/PycharmProjects/NetworkingFTP/FTP Dir/"
+
     client.close()
+
+
+
+
+
