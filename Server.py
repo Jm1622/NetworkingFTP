@@ -50,8 +50,3 @@ while True:
         directory = "/Users/jmartin/PycharmProjects/NetworkingFTP/FTP Dir/"
 
     client.close()
-
-
-
-
-
