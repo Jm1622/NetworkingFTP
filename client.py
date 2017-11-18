@@ -12,6 +12,22 @@ x = True
 host = input("Enter ip address: ")     # sets host to ip address
 s.connect((host, port))
 authCheck = "0"               # Server will check user name and password and return 0 if incorrect.
+
+# Functions
+def get(filename):
+    f = open(filename, 'wb')
+    data = s.recv(1024)
+    while True:
+        print("Receiving data...")
+        f.write(data)
+        try:
+            data.decode() != "File sent"
+            break
+        except UnicodeDecodeError:
+            data = s.recv(1024)
+    print("File received")
+    f.close()
+
 while(authCheck == "0"):
     id = input("id: ")
     pw = getpass.getpass(prompt = "password: ")
@@ -25,6 +41,14 @@ while x:
     s.send(choice.lower().encode())
     if choice.lower() == "quit":
         x = False
+    elif choice.lower() == "get":
+        filename = input("filename: ")
+        s.send(filename.encode())
+        message = s.recv(1024).decode()
+        if message == "File found":
+            get(filename)
+        else:
+            print("File not found.")
     else:
         print("Invalid command")
 s.close              # Close the socket when done
