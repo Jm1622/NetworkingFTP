@@ -45,7 +45,7 @@ while True:
                 client.shutdown(socket.SHUT_WR)
                 client.close
                 file.close()
-                s = socket.socket()
+                commmandSocket = socket.socket()
                 commandSocket.bind((host, port))
                 commandSocket.listen(5)
                 client, addr = commandSocket.accept()
