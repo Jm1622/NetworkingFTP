@@ -42,9 +42,14 @@ while True:
                     client.send(data)
                     count += 1
                     data = file.read(1024)
-                client.send("File sent".encode())
-                print("File Sent")
+                client.shutdown(socket.SHUT_WR)
+                client.close
                 file.close()
+                s = socket.socket()
+                commandSocket.bind((host, port))
+                commandSocket.listen(5)
+                client, addr = commandSocket.accept()
+                print("File Sent")
             except FileNotFoundError:
                 client.send('File not found'.encode())
         directory = "/Users/jmartin/PycharmProjects/NetworkingFTP/FTP Dir/"

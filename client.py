@@ -17,16 +17,15 @@ authCheck = "0"               # Server will check user name and password and ret
 def get(filename):
     f = open(filename, 'wb')    # opens a file with write permissions
     data = s.recv(1024)
-    while True:
-        print("Receiving data...")
+    while data:
+        print("Receiving...")
         f.write(data)
-        try:
-            data.decode() != "File sent"
-            break
-        except UnicodeDecodeError:
-            data = s.recv(1024)
-    print("File received")
+        data = s.recv(1024)
     f.close()
+    s.close()
+    print("Done Receiving")
+    s = socket.socket()
+    s.connect((host, port))
 
 while(authCheck == "0"):
     id = input("id: ")
