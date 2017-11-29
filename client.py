@@ -1,6 +1,7 @@
 # Author: Jacob Cassity
 import socket               # Import socket module
-import getpass              # inports getpass, used for hiding password
+import getpass              # Imports getpass, used for hiding password
+import os                   # Imports os, used for directory
 
 s = socket.socket()         # Create a socket object
 t = socket.socket()
@@ -15,17 +16,34 @@ authCheck = "0"               # Server will check user name and password and ret
 
 # Functions
 def get(filename):
-    f = open(filename, 'wb')    # opens a file with write permissions
+    f = open(filename, 'wb')
     data = s.recv(1024)
     while data:
-        print("Receiving...")
+        print("Receiving data...")
         f.write(data)
         data = s.recv(1024)
+    print("File received")
     f.close()
-    s.close()
-    print("Done Receiving")
-    s = socket.socket()
-    s.connect((host, port))
+
+def put():
+    filename = input("filename: ")
+    s.send(filename.encode())
+    try:
+        file = open((os.getcwd() + "\\" + filename), 'rb')
+        s.send('File found'.encode())
+        data = file.read(1024)
+        count = 1
+        while (data):
+            print("Sending data..." + str(count))
+            s.send(data)
+            count += 1
+            data = file.read(1024)
+        s.close()
+        file.close()
+        print("File Sent")
+    except FileNotFoundError:
+        print("File not found")
+        s.send('File not found'.encode())
 
 while(authCheck == "0"):
     id = input("id: ")
@@ -46,8 +64,32 @@ while x:
         message = s.recv(1024).decode()
         if message == "File found":
             get(filename)
+            s.close()
+            s = socket.socket()
+            s.connect((host, port))
         else:
             print("File not found.")
+            s.close()
+            s = socket.socket()
+            s.connect((host, port))
+    elif choice.lower() == "put":
+        put()
+        s.close()
+        s = socket.socket()
+        s.connect((host, port))
+    elif choice.lower() == "cd":
+        Jdirectory = s.recv(1024).decode()
+        path = input(Jdirectory + "/")
+        s.send(path.encode())
+        print(s.recv(1024).decode())
+    elif choice.lower() == "cd local":
+        path = input(os.getcwd() + "\\")
+        try:
+            os.chdir(path)
+            print(os.getcwd())
+        except FileNotFoundError:
+            print("Incorrect path")
+
     else:
         print("Invalid command")
 s.close              # Close the socket when done
