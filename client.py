@@ -1,4 +1,4 @@
-# Author: Jacob Cassity
+# Author: Jacob Cassity and Jeremy Martin
 import socket               # Import socket module
 import getpass              # Imports getpass, used for hiding password
 import os                   # Imports os, used for directory
