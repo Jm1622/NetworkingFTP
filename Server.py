@@ -1,3 +1,5 @@
+#Jeremy Martin and Jacob Cassity
+#Group: Za Warudo
 import socket
 import re
 import os
