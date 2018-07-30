@@ -1,3 +1,3 @@
 # NetworkingFTP
 A networking project by Jeremy Martin and Jacob Cassity
-It is a basic FTP server, it mostly functions. One existing issue is that it wil lsometimes freeze on certain files.
+A FTP server implemented in python. There is a known issue where it will get caught while transferring a file and never complete, but in most cases it will work correctly.
